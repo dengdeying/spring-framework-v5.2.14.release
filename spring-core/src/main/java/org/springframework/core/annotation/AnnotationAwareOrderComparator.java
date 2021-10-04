@@ -16,17 +16,21 @@
 
 package org.springframework.core.annotation;
 
-import java.lang.reflect.AnnotatedElement;
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.core.DecoratingProxy;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.lang.Nullable;
 
+import java.lang.reflect.AnnotatedElement;
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * {@code AnnotationAwareOrderComparator} is an extension of
+ * {@code AnnotationAwareOrderComparator} 是{@link OrderComparator}的扩展，
+ * 支持Spring的<{@link org.springframework.core.Ordered}接口，也支持{@link Order @Order}注解和
+ * {@link javax.annotation.Priority @Priority}注解，如果存在的话，{@code Ordered}实例提供的顺序值会覆盖注解定义的静态数值。 </p>
+ *
+ * <p>{@code AnnotationAwareOrderComparator} is an extension of
  * {@link OrderComparator} that supports Spring's
  * {@link org.springframework.core.Ordered} interface as well as the
  * {@link Order @Order} and {@link javax.annotation.Priority @Priority}

@@ -19,7 +19,8 @@ package org.springframework.beans.factory;
 import org.springframework.beans.BeansException;
 
 /**
- * Interface to be implemented by beans that wish to be aware of their
+ * 该接口由希望了解其所属BeanFactory的Bean实现。
+ * <p>Interface to be implemented by beans that wish to be aware of their
  * owning {@link BeanFactory}.
  *
  * <p>For example, beans can look up collaborating beans via the factory

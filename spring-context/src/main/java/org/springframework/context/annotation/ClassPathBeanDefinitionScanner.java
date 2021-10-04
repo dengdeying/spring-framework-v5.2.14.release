@@ -16,17 +16,10 @@
 
 package org.springframework.context.annotation;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionDefaults;
-import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanNameGenerator;
+import org.springframework.beans.factory.support.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.EnvironmentCapable;
 import org.springframework.core.env.StandardEnvironment;
@@ -34,6 +27,9 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.PatternMatchUtils;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * A bean definition scanner that detects bean candidates on the classpath,
@@ -110,6 +106,8 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * @see #setEnvironment
 	 */
 	public ClassPathBeanDefinitionScanner(BeanDefinitionRegistry registry, boolean useDefaultFilters) {
+		// 1 如果可能，从给定的注册表获取Environment，否则返回新的StandardEnvironment
+		// 2 构造新的AnnotatedBeanDefinitionReader
 		this(registry, useDefaultFilters, getOrCreateEnvironment(registry));
 	}
 
@@ -136,7 +134,8 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 */
 	public ClassPathBeanDefinitionScanner(BeanDefinitionRegistry registry, boolean useDefaultFilters,
 			Environment environment) {
-
+		// 1 如果给定的Bean定义注册表是一个ResourceLoader实例，则把BeanDefinitionRegistry用作ResourceLoader，否则空着。
+		// 2 构建新的ClassPathBeanDefinitionScanner；
 		this(registry, useDefaultFilters, environment,
 				(registry instanceof ResourceLoader ? (ResourceLoader) registry : null));
 	}
@@ -158,14 +157,19 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 */
 	public ClassPathBeanDefinitionScanner(BeanDefinitionRegistry registry, boolean useDefaultFilters,
 			Environment environment, @Nullable ResourceLoader resourceLoader) {
-
+		System.out.println("ClassPathBeanDefinitionScanner.ClassPathBeanDefinitionScanner");
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
+		System.out.println("设置所属Bean定义注册表");
 		this.registry = registry;
 
 		if (useDefaultFilters) {
+			// 默认注册{@link Component @Component}、Java EE 6的{@link javax.annotation.ManagedBean}和JSR-330的 {@link javax.inject.Named}过滤器
+			System.out.println("设置默认过滤器");
 			registerDefaultFilters();
 		}
+		// 初始化Environment - 如果可能，从给定的注册表获取Environment，否则返回新的StandardEnvironment
 		setEnvironment(environment);
+		// 初始化ResourceLoader - 如果给定的Bean定义注册表是一个ResourceLoader实例，则把BeanDefinitionRegistry用作ResourceLoader，否则空着。
 		setResourceLoader(resourceLoader);
 	}
 
@@ -368,11 +372,15 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 
 
 	/**
-	 * Get the Environment from the given registry if possible, otherwise return a new
+	 * 如果可能，从给定的注册表获取Environment，否则返回新的StandardEnvironment
+	 *
+	 * <p>Get the Environment from the given registry if possible, otherwise return a new
 	 * StandardEnvironment.
 	 */
 	private static Environment getOrCreateEnvironment(BeanDefinitionRegistry registry) {
+		System.out.println("ClassPathBeanDefinitionScanner.getOrCreateEnvironment");
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
+		System.out.println("如果可能，从给定的Bean定义注册表获取Environment，否则返回新的StandardEnvironment");
 		if (registry instanceof EnvironmentCapable) {
 			return ((EnvironmentCapable) registry).getEnvironment();
 		}

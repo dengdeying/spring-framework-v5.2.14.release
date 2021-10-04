@@ -16,9 +16,6 @@
 
 package org.springframework.context.annotation;
 
-import java.lang.annotation.Annotation;
-import java.util.function.Supplier;
-
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
@@ -32,6 +29,9 @@ import org.springframework.core.env.EnvironmentCapable;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.lang.annotation.Annotation;
+import java.util.function.Supplier;
 
 /**
  * Convenient adapter for programmatic registration of bean classes.
@@ -81,10 +81,14 @@ public class AnnotatedBeanDefinitionReader {
 	 * @since 3.1
 	 */
 	public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry, Environment environment) {
+		System.out.println("AnnotatedBeanDefinitionReader.AnnotatedBeanDefinitionReader");
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		Assert.notNull(environment, "Environment must not be null");
+		System.out.println("设置所属Bean定义注册表");
 		this.registry = registry;
+		System.out.println("设置Conditional注解的评估类");
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
+		System.out.println("初始化注解配置处理器");
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 	}
 
@@ -287,11 +291,14 @@ public class AnnotatedBeanDefinitionReader {
 
 
 	/**
-	 * Get the Environment from the given registry if possible, otherwise return a new
+	 * 如果可能，从给定的Bean定义注册表获取Environment，否则返回新的StandardEnvironment
+	 * <p>Get the Environment from the given registry if possible, otherwise return a new
 	 * StandardEnvironment.
 	 */
 	private static Environment getOrCreateEnvironment(BeanDefinitionRegistry registry) {
+		System.out.println("AnnotatedBeanDefinitionReader.getOrCreateEnvironment");
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
+		System.out.println("如果可能，从给定的Bean定义注册表获取Environment，否则返回新的StandardEnvironment");
 		if (registry instanceof EnvironmentCapable) {
 			return ((EnvironmentCapable) registry).getEnvironment();
 		}

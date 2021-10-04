@@ -17,7 +17,8 @@
 package org.springframework.beans.factory;
 
 /**
- * Callback that allows a bean to be aware of the bean
+ * 允许Bean知道其所属{@link ClassLoader class loader}；
+ * <p>Callback that allows a bean to be aware of the bean
  * {@link ClassLoader class loader}; that is, the class loader used by the
  * present bean factory to load bean classes.
  *
